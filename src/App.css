@@ -97,6 +97,10 @@ nav {
   margin-left: 35px;
   padding: 5px 28px 5px 28px;
 }
+
+.temp-switch__icon {
+  padding-right: 5px;
+}
 /* end tool bar */
 
 .weather-condition {
@@ -107,6 +111,11 @@ nav {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+.weather-condition__rating {
+  text-align: center; 
+  font-size: 14px;
 }
 .weather-condition__desc {
   display: flex;
