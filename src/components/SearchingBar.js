@@ -4,9 +4,6 @@ function SearchingBar() {
     const divFlex = {
         flex: 1
     }
-    const buttonStyle = {
-        paddingRight: '5px'
-    }
     return (
         <nav>
         <div style={ divFlex } >
@@ -17,9 +14,8 @@ function SearchingBar() {
 
             <button className="temp-switch">
             <i
-              className="fa fa-thermometer-empty"
+              className="fa fa-thermometer-empty temp-switch__icon"
               aria-hidden="true"
-              style={ buttonStyle } 
             ></i>
             <sup>&deg;</sup>C
           </button>
