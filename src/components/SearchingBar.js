@@ -6,7 +6,7 @@ function SearchingBar() {
     }
     return (
         <nav>
-        <div style={ divFlex } >
+        <div style={divFlex} >
             <input className="search-input" />
             <button className="search-btn">
                 <i className="fa fa-search"></i>
