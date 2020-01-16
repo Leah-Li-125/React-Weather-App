@@ -7,11 +7,12 @@ import Main from './components/Main';
 import SearchingBar from './components/SearchingBar';
 
 /*
-Note #4: make item limit button work
-	initial limit state in App comp
-	-> create a handleChangeLimit fn to setState in App comp
-	-> pass a fn handleChangeLimit as well as a varible limit to update state in WeatherForecast comp in Main
-		->add onClick() for item buttons in WeatherForecast compa and put callbank fn handleChangeLimit(limit) in onClick()
+Note #5: make CurrentWeather component dynamic:
+	In App comp, initial state for cityName(string) and current(object)
+	-> fetch data from api and setState in DidMount in App comp
+	-> add this two new state data in Main comp so that Main can pass props down to its child - CurrentWeather comp
+	-> in CurrentWeather comp, receive props to get state data from Main comp
+		-> render props.cityName and props.current (and three props in current object) on page 
 */
 
 
@@ -22,15 +23,19 @@ class App extends React.Component {
 		this.state = {
 			forecasts: [],
 			limit: 5,
+			cityName: '',
+			current: {},
 		}
 	}
 
 	componentDidMount() {
 		axios.get('https://jr-weather-api.herokuapp.com/api/weather?city=brisbane&cc=au')
 			.then(response => {
-				const forecasts = response.data.data.forecast.slice(0, 10);
-				
-				this.setState({ forecasts });
+				const data = response.data.data;
+				const cityName = data.city.name;
+				const current = data.current;
+				const forecasts = data.forecast.slice(0, 10);
+				this.setState({ cityName, current, forecasts });
 			})
 	}
 
@@ -47,6 +52,8 @@ class App extends React.Component {
 					forecasts={this.state.forecasts}
 					handleChangeLimit={this.handleChangeLimit}
 					limit={this.state.limit}
+					cityName={this.state.cityName}
+					current={this.state.current}
 				/>
 				<Footer />
 			</div>
