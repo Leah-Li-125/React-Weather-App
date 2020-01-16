@@ -207,7 +207,7 @@ class WeatherForecast extends React.Component {
 			.then(response => {
 				// console.log(response);
 				const rawForecasts = response.data.data.forecast.slice(0, 10);
-				// console.log(forecasts);
+				// console.log(rawForecasts);
 				const forecasts = rawForecasts.map(rawForecast => { 
 					const date = new Date(rawForecast.time * 1000)
 					const day = format(date, 'EEE');      //date-fns
