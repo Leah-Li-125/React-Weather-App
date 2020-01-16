@@ -6,7 +6,11 @@ function Main(props) {
     return(
         <main>
             <CurrentWeather />
-            <WeatherForecast forecasts={props.forecasts}/>
+            <WeatherForecast 
+                forecasts={props.forecasts}
+				handleChangeLimit={props.handleChangeLimit}
+				limit={props.limit}
+            />
         </main>
     );
 }
