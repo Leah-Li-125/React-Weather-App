@@ -7,31 +7,21 @@ import Main from './components/Main';
 import SearchingBar from './components/SearchingBar';
 
 /*
-Note #3: lift state up
-	Since the WeatherForecasts comp and CurrentWeatehr are sibling children of Main comp, 
-	and Main comp is sibling of SearchingBar comp.
-	Children of Main comp and SearchingBar comp need the state data in forecasts array.
-	so lift the state up and up again from WeatherForecasts to the App 
-	so that he WeatherForecasts comp,CurrentWeatehr comp and SearchingBar all can get access to state.
-
+Note #4: make item limit button work
+	initial limit state in App comp
+	-> create a handleChangeLimit fn to setState in App comp
+	-> pass a fn handleChangeLimit as well as a varible limit to update state in WeatherForecast comp in Main
+		->add onClick() for item buttons in WeatherForecast compa and put callbank fn handleChangeLimit(limit) in onClick()
 */
-// function App() {
-//   return (
-// 		<div className="weather-channel__container">
-// 			<Header />
-// 			<SearchingBar />
-// 			<Main />
-// 			<Footer />
-// 	  </div>
-// 	);
-// }
+
 
 class App extends React.Component {
 	constructor (props) {
 		super(props);
 
 		this.state = {
-			forecasts: [] 
+			forecasts: [],
+			limit: 5,
 		}
 	}
 
@@ -44,12 +34,20 @@ class App extends React.Component {
 			})
 	}
 
+	handleChangeLimit = limit => {
+		this.setState({ limit });
+	}
+
 	render() {
 		return (
 			<div className="weather-channel__container">
 				<Header />
 				<SearchingBar />
-				<Main forecasts={this.state.forecasts}/>
+				<Main
+					forecasts={this.state.forecasts}
+					handleChangeLimit={this.handleChangeLimit}
+					limit={this.state.limit}
+				/>
 				<Footer />
 			</div>
 		)
