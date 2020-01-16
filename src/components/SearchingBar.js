@@ -1,14 +1,25 @@
 import React from 'react';
 
-function SearchingBar() {
+function SearchingBar(props) {
     const divFlex = {
         flex: 1
     }
+
+    const searchOnEnter = event => {
+        const isEnterPressed = event.key === 'Enter';
+        if (isEnterPressed) props.search();
+    }
+
     return (
         <nav>
         <div style={divFlex} >
-            <input className="search-input" />
-            <button className="search-btn">
+            <input 
+              onKeyPress={searchOnEnter}
+              onChange={props.handleSearchValueChange} 
+              value = {props.searchValue} 
+              className="search-input" 
+            />
+            <button onClick={props.search} className="search-btn">
                 <i className="fa fa-search"></i>
             </button>
 
