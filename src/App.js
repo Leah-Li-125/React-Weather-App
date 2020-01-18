@@ -7,26 +7,7 @@ import SearchingBar from './components/SearchingBar';
 import { getWeather } from './utils/axios';
 
 /*
-Note #8 make unit toggle work
-	Firstly, initialize a state of unit to C, 
-	and then pass this state down to Main and SearchingBar comps, then pass props.unit to WeatherForecast and CurrentWeather.
-	Go to CurrentWeather comp, and destruct props object to get the key - unit: const { cityName, current, unit } = props,
-	and then set a const tempHigh to get either maxCelsius or maxFahrenheit by using a condition to judge. 
-
-	Secondly, add an event handler toggleUnit() to toggle unit when click the toggle C/F button.
-	the logic here is just to setState from C to F or F to C 
-	so just get the previous state by useing an arrow fn in setState and if the previous state is C, toggle to F, otherwise, toggle to C
-	then pass this toggleUnit fn to the comp where the button will be clicked, that is SearchingBar.
-	Go to SearchingBar comp, add an onClick() to temp-switch button and let the onClick to trigger props.toggleUnit straight away.
-	now the temparature in currentWeather comp can toggle C to F and then F to C.
-	
-	Thirdly, we need to let the unit on the button to toggle as well.
-	just pass props.unit to the button element's sup element: <sup>&deg;</sup>{props.unit}
-
-	Finally, just let the toggle unit work in WeatherForecast just exactly same as the work done in CurrentWeather.
-	detruct the props to get the unit key -> when do the map, set a const high and const low 
-	and do the condition logic if it is C, get forecast.maxCelsius or minC, otherwise, forecast.maxFahrenheit or minF
-	->pass the unit from WeatherForecast to ForecastRow and go to ForecastRow to add {props.unit} to display C or F.	
+Note #1-#8 refer to step by step branch commits 	
 */
 
 
