@@ -23,12 +23,12 @@ function SearchingBar(props) {
                 <i className="fa fa-search"></i>
             </button>
 
-            <button className="temp-switch">
+            <button onClick={props.toggleUnit} className="temp-switch">
             <i
               className="fa fa-thermometer-empty temp-switch__icon"
               aria-hidden="true"
             ></i>
-            <sup>&deg;</sup>C
+            <sup>&deg;</sup>{props.unit}
           </button>
         </div>
       </nav>

@@ -7,49 +7,26 @@ import SearchingBar from './components/SearchingBar';
 import { getWeather } from './utils/axios';
 
 /*
-Note #7 make input controlled: 
-	in React, all input field can be classified to two input type:
-	controlled input and uncontrolled input
+Note #8 make unit toggle work
+	Firstly, initialize a state of unit to C, 
+	and then pass this state down to Main and SearchingBar comps, then pass props.unit to WeatherForecast and CurrentWeather.
+	Go to CurrentWeather comp, and destruct props object to get the key - unit: const { cityName, current, unit } = props,
+	and then set a const tempHigh to get either maxCelsius or maxFahrenheit by using a condition to judge. 
 
-	uncontrolled input means that the updated state will not related to the input change. though the state is changed when onChange() in input trigger the change of state, will not change the state of inputfield. so the changed input value will store in the html input element, not stored in state. so if you want to get the value you have to use dom reference. React recommand to use controlled input. the reason shows below.
+	Secondly, add an event handler toggleUnit() to toggle unit when click the toggle C/F button.
+	the logic here is just to setState from C to F or F to C 
+	so just get the previous state by useing an arrow fn in setState and if the previous state is C, toggle to F, otherwise, toggle to C
+	then pass this toggleUnit fn to the comp where the button will be clicked, that is SearchingBar.
+	Go to SearchingBar comp, add an onClick() to temp-switch button and let the onClick to trigger props.toggleUnit straight away.
+	now the temparature in currentWeather comp can toggle C to F and then F to C.
 	
-	In react, the app's state is a reflection of state！
-	so we need to put input field of the searchig bar into state,
-	that is, no matter what is inputed in the field, the state should reflect the updated input state. -> thus, it will be a controlled input field.
+	Thirdly, we need to let the unit on the button to toggle as well.
+	just pass props.unit to the button element's sup element: <sup>&deg;</sup>{props.unit}
 
-	first go to SearchingBar comp to let it receive props 
-	-> then give input element a new prop: value = {props.searchValue}
-	-> when we use this SearchingBar comp, pass the new prop: searchValue in the comp
-	-> then we can get the value of searchValue from state: this.state.searchValue
-	-> after that, we need to initalize this state in constructor
-	(now the searchValue is '' and cannot change the inputfield now, so go to next step to change input value)
-
-	secondly, we need to update state to make the searchingbar able to change input 
-	-> go to SearchingBar comp to add an onChange() in input element.
-	-> then we need to get back to App to pass a handleSearch fn into the onChange() to enable update state from child to parent
-		-> define an event handler in App: handleSearchValueChange()
-		-> do all logic in this event handler (will show how to do that later)
-		-> add a fn prop in SearchingBar comp rendering to pass this fn from App to the child SearchingBar comp
-		-> then just let onClick() to call this fn
-	do the logic here. when you write the logic for onChange(), the event it recieves is a synthetic event - a wrapper of native html events. so how to get a inputfield value? Not use this.value, using event.target.value to get value. here event.target = this, means the inputfield you changed or the button you clicked. then this.setState to assign the changed value to searchValue.
-	(now it works to change the value in inputfield, the work flow is as below:
-	input 'cityName' in App inputfield -> handleSearchValueChange() will setState -> display 'cityName' on App
-	so, next we need to fetch data from api to get date under this cityName)
-
-	Thirdly, here the code logic is quite similar with the async-awaite fn - axios to get a propmise but not just data from brisbane, but from any cities in Australia. so the best practice is to new create a utils folder and then new file named axios.js under utils folder. This axios.js will be used to send api request and deal with the response. 
-	->import axios in axios.js and write a getWeather(city) to use axios('url') return a promise and export this fn
-	-> in App import {getWeather} and let async fn to call getWeather('Brisbane') to get response
-	-> and the use the response to upadteWeather()
-
-	Finally, when input a cityname and click the search-btn, it will trigger 
-	-> add onClick() in search-btn in SearchingBar comp
-	-> add a prop search in SearchingBar comp in App.js to pass a fn named search
-	-> the search fn will get response by using getWeather(city) and updateWeather(response) to update weather data in CurrentWeather comp
-	-> now need pass the state.searchValue into search() to get certain city's current weather data
-	-> to make this fn async-await
-	(to page check and inpect network to see whether send a request properly and see whether CurrenWeather comp display update properly)
-	
-	One more thing to do, go to SearchingBar comp, to add onKeyPress={searchOnEnter} and write a logic for searchOnEnter() to let you use key 'Enter' to trigger search().
+	Finally, just let the toggle unit work in WeatherForecast just exactly same as the work done in CurrentWeather.
+	detruct the props to get the unit key -> when do the map, set a const high and const low 
+	and do the condition logic if it is C, get forecast.maxCelsius or minC, otherwise, forecast.maxFahrenheit or minF
+	->pass the unit from WeatherForecast to ForecastRow and go to ForecastRow to add {props.unit} to display C or F.	
 */
 
 
@@ -63,6 +40,7 @@ class App extends React.Component {
 			cityName: '',
 			current: {},
 			searchValue: '',
+			unit: 'C',
 		}
 	}
 
@@ -96,16 +74,22 @@ class App extends React.Component {
 		this.updateWeather(response);
 	}
 
+	toggleUnit = () => {
+		this.setState(state => ({unit: state.unit === 'C' ? 'F' : 'C'}));
+	}
 	render() {
 		return (
 			<div className="weather-channel__container">
 				<Header />
 				<SearchingBar 
+					toggleUnit={this.toggleUnit}
+					unit={this.state.unit}
 					search={this.search}
 					searchValue={this.state.searchValue}
 					handleSearchValueChange={this.handleSearchValueChange}
 				/>
 				<Main
+					unit={this.state.unit}
 					forecasts={this.state.forecasts}
 					handleChangeLimit={this.handleChangeLimit}
 					limit={this.state.limit}
